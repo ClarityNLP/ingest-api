@@ -24,9 +24,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'pages/homepage'
-  },
+  'post /pair': 'CsvController.pair',
+  'post /ingest/csv': 'CsvController.ingest',
+  'get /csv/initial': 'CsvController.initial'
 
   /***************************************************************************
   *                                                                          *
