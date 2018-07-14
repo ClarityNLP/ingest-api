@@ -46,7 +46,7 @@ module.exports = {
 
       let count = 0;
       let chunk = [];
-      const chunkSize = 5;
+      const chunkSize = 10000;
 
       var onData = function(row) {
         let payload = {};
@@ -60,7 +60,6 @@ module.exports = {
           }
           return;
         });
-        payload['report_text'] = "testing";
 
         chunk.push(payload);
         count++;
@@ -74,6 +73,7 @@ module.exports = {
             body: chunk,
             json: true
           });
+          chunk = [];//empty chunk
         }
       };
       csvStream.on('data', onData);
