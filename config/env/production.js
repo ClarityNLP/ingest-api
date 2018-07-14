@@ -92,6 +92,8 @@ module.exports = {
   ***************************************************************************/
   sockets: {
 
+    onlyAllowOrigins: ['http://18.220.133.76:6543']
+
     /***************************************************************************
     *                                                                          *
     * Uncomment the `onlyAllowOrigins` whitelist below to configure which      *
