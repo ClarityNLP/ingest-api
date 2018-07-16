@@ -26,7 +26,14 @@ module.exports.routes = {
 
   'post /pair': 'CsvController.pair',
   'post /ingest/csv': 'CsvController.ingest',
-  'get /csv/initial': 'CsvController.initial'
+  'get /csv/initial': 'CsvController.initial',
+
+  //solr stats
+  'get /solr/core': 'SolrController.core',
+  'get /solr/numDocs': 'SolrController.numDocs',
+
+  //user
+  'get /me': 'UserController.me' //get user's session
 
   /***************************************************************************
   *                                                                          *

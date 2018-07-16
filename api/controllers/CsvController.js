@@ -17,11 +17,29 @@ module.exports = {
   },
 
   ingest: function(req,res) {
+
     const mappings = JSON.parse(req.param('mappings'));
+    const fileSize =  req.param('fileSize')
+    let progressCount = 0
+    const progressSize = 1000;
+
+    sails.sockets.blast('csvIngestUpdate', { status: 'Uploading file' });
 
     req.file('csv').upload({
       maxBytes: 1000000000000,
-      dirName: '/tmp'
+      dirName: '/tmp',
+      onProgress: function(progress) {
+        if (progressCount === progressSize) {
+          const percent = Math.round((progress.written/fileSize)*100);
+          sails.log.info(`Upload progress is ${percent} @ ${new Date()}`);
+          sails.sockets.blast('csvIngestUpdate', { status: `Uploading file (${percent}%)` });
+          progressCount = 0;
+          return;
+        } else {
+          progressCount++
+          return;
+        }
+      }
     }, function(err, uploadedFiles) {
       if (err) {
         sails.log.error(err);
@@ -36,21 +54,25 @@ module.exports = {
         return res.send(400, { message: 'File must be csv format. ' } );
       }
 
+      sails.sockets.blast('csvIngestUpdate', { status: 'Done uploading file. Creating read stream.' });
+
       const fileStream = fs.createReadStream(uploadedFiles[0].fd, 'utf8');
       const csvStream = csv({
         headers: true, //ignore columns (row 1)
         ignoreEmpty: true
       });
 
+      sails.sockets.blast('csvIngestUpdate', { status: 'Writing to Solr instance.' });
+
       fileStream.pipe(csvStream);
 
       let count = 0;
       let chunk = [];
-      const chunkSize = 10000;
+      const chunkSize = 500;
 
-      var onData = function(row) {
+      var onValidate = function(row, next) {
         let payload = {};
-        payload['id'] = uuidv4();
+        // payload['id'] = uuidv4(); //TODO
         //append generated id onto report_id
         mappings.map(obj => {
           if (obj.type === 'select') {
@@ -66,28 +88,61 @@ module.exports = {
 
         if (count == chunkSize) {
           count = 0;
-          console.log(`sending chunk @ ${new Date()}`);
           request({
             url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?commit=true`,
             method: 'POST',
             body: chunk,
             json: true
+          }, function(err, response, body) {
+            if (err) {
+              sails.log.error(err);
+              chunk = [];
+              next(err);
+            } else {
+              sails.helpers.getSolrNumDocs( process.env.NLP_CORE_NAME ).switch({
+                error: function(err) {
+                  sails.log.error(err);
+                  chunk = [];
+                  next(null,true);
+                },
+                success: function(numDocs) {
+                  sails.sockets.blast('numDocsUpdate', { numDocs: numDocs });
+                  chunk = [];
+                  next(null,true);
+                }
+              });
+            }
           });
-          chunk = [];//empty chunk
+        } else {
+          next(null,true)
         }
+      }
+
+      var onData = function(row) {
+        return; //todo -- remove;
       };
+      csvStream.validate(onValidate);
       csvStream.on('data', onData);
       csvStream.on('end', function(){
-        //send the data that hasn't made the chunk limit
-        //todo, possible dup scenario
         request({
           url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?commit=true`,
           method: 'POST',
           body: chunk,
           json: true
+        }, function(err, response, body) {
+          sails.helpers.getSolrNumDocs( process.env.NLP_CORE_NAME ).switch({
+            error: function(err) {
+              sails.log.error(err);
+              fs.unlinkSync(uploadedFiles[0].fd);
+              return res.send(500, { message: "Something went wrong." });
+            },
+            success: function(numDocs) {
+              sails.sockets.blast('numDocsUpdate', { numDocs: numDocs });
+              fs.unlinkSync(uploadedFiles[0].fd);
+              return res.send(200, {});
+            }
+          });
         });
-        fs.unlinkSync(uploadedFiles[0].fd);
-        return res.send(200, {});
       });
     });
   },
