@@ -1,20 +1,23 @@
-/**
- * Bootstrap
- * (sails.config.bootstrap)
- *
- * An asynchronous bootstrap function that runs just before your Sails app gets lifted.
- * > Need more flexibility?  You can also do this by creating a hook.
- *
- * For more information on bootstrapping your app, check out:
- * https://sailsjs.com/config/bootstrap
- */
+const seed = require('../seed.js');
 
 module.exports.bootstrap = function(done) {
 
-  // By convention, this is a good place to set up fake data during development.
-
-  // Don't forget to trigger `done()` when this bootstrap function's logic is finished.
-  // (otherwise your server will never lift, since it's waiting on the bootstrap)
-  return done();
-
+  // Check to see if we have already seeded the Field collection w/ default data
+  Field.count().exec(function(err, fieldCount) {
+    if (err) {
+      sails.log.error(err);
+      return done();
+    }
+    if (fieldCount > 0) {
+      return done();
+    }
+    //Seed the field collection
+    Field.createEach(seed.field()).exec(function(err) {
+      if (err) {
+        sails.log.error(err);
+        return done();
+      }
+      return done();
+    });
+  });
 };

@@ -1,66 +1,36 @@
-/**
- * Route Mappings
- * (sails.config.routes)
- *
- * Your routes tell Sails what to do each time it receives a request.
- *
- * For more information on configuring custom routes, check out:
- * https://sailsjs.com/anatomy/config/routes-js
- */
-
 module.exports.routes = {
 
+  //create ingest record
+  'post /ingest/csv': 'CsvController.createIngest',
 
-  //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
-  //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
-  //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  //get fields
+  'get /fields': 'FieldController.getFields',
 
-  /***************************************************************************
-  *                                                                          *
-  * Make the view located at `views/homepage.ejs` your home page.            *
-  *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
-  *                                                                          *
-  ***************************************************************************/
+  //ingest jobs
+  'post /ingest/:ingestId/schedule': 'CsvController.scheduleIngestJob',
 
-  'post /pair': 'CsvController.pair',
-  'post /ingest/csv': 'CsvController.ingest',
-  'get /csv/initial': 'CsvController.initial',
+  //get paginated ingest records
+  'get /ingest': 'IngestController.getPageOfIngestRecords',
+
+  //delete ingest record and documents from solr
+  'get /ingest/:ingestId/delete': 'IngestController.deleteRecordandDocsFromSolr',
 
   //solr stats
   'get /solr/core': 'SolrController.core',
   'get /solr/numDocs': 'SolrController.numDocs',
 
   //user
-  'get /me': 'UserController.me' //get user's session
+  'get /me': 'UserController.me', //get user's session
 
-  /***************************************************************************
-  *                                                                          *
-  * More custom routes here...                                               *
-  * (See https://sailsjs.com/config/routes for examples.)                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the routes in this file, it   *
-  * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
-  * not match any of those, it is matched against static assets.             *
-  *                                                                          *
-  ***************************************************************************/
+  //csv file upload
+  'post /upload': 'FileController.upload',
 
+  //chunk status check
+  'get /upload': 'FileController.chunkStatusCheck',
 
-  //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
-  //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
-  //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
+  //retrieve file identifier, invoke with /fileid?filename=my-file.jpg
+  'get /fileid': 'FileController.fileId',
 
-
-
-  //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
-  //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
-  //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
-
-
-  //  ╔╦╗╦╔═╗╔═╗
-  //  ║║║║╚═╗║
-  //  ╩ ╩╩╚═╝╚═╝
-
-
+  //download file
+  'get /download/:identifier': 'FileController.download'
 };
