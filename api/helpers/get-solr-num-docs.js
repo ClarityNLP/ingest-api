@@ -25,6 +25,9 @@ module.exports = {
       if (err) {
         return exits.error(err);
       }
+      if (response.statusCode === 404) {
+        return exits.error(`Error fetching number of Solr documents. Make sure you created the *${process.env.NLP_CORE_NAME}* core.`);
+      }
       const numDocs = JSON.parse(body).response.numFound;
       return exits.success(numDocs);
     });
