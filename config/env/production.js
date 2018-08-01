@@ -2,7 +2,10 @@ module.exports = {
 
   datastores: {
 
-    default: {}
+    default: {
+      adapter: 'sails-mongo',
+      url: `mongodb://${process.env.INGEST_MONGO_HOSTNAME}:${process.env.INGEST_MONGO_CONTAINER_PORT}/${process.env.INGEST_MONGO_DATABASE}`
+    }
 
   },
 
@@ -49,7 +52,7 @@ module.exports = {
       allowOrigins: '*',
       allowCredentials: true,
       allowAnyOriginWithCredentialsUnsafe: true
-    },
+    }
   },
 
 
@@ -66,17 +69,17 @@ module.exports = {
   ***************************************************************************/
   session: {
 
-  secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
+    secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
 
-  adapter: 'connect-redis',
-  url: 'redis://redis:6379/0',
+    adapter: 'connect-redis',
+    url: `redis://${MAPPER_REDIS_HOSTNAME}:${MAPPER_REDIS_CONTAINER_PORT}/0`,
 
-  cookie: {
-    // secure: true,
-    maxAge: 24 * 60 * 60 * 1000,  // 24 hours
+    cookie: {
+      // secure: true,
+      maxAge: 24 * 60 * 60 * 1000,  // 24 hours
+    },
+
   },
-
-},
 
 
 
@@ -92,7 +95,10 @@ module.exports = {
   ***************************************************************************/
   sockets: {
 
-    onlyAllowOrigins: ['http://18.220.133.76', 'http://18.220.133.76:6543'],//TODO use process.env
+    onlyAllowOrigins: [
+      process.env.BASE_URL,
+      `${process.env.BASE_URL}:${process.env.INGEST_CLIENT_HOST_PORT}`
+    ],
 
     /***************************************************************************
     *                                                                          *
@@ -193,36 +199,6 @@ module.exports = {
   // port: 80,
 
 
-
-  /**************************************************************************
-  *                                                                         *
-  * Configure an SSL certificate                                            *
-  *                                                                         *
-  * For the safety of your users' data, you should use SSL in production.   *
-  * ...But in many cases, you may not actually want to set it up _here_.    *
-  *                                                                         *
-  * Normally, this setting is only relevant when running a single-process   *
-  * deployment, with no proxy/load balancer in the mix.  But if, on the     *
-  * other hand, you are using a PaaS like Heroku, you'll want to set up     *
-  * SSL in your load balancer settings (usually somewhere in your hosting   *
-  * provider's dashboard-- not here.)                                       *
-  *                                                                         *
-  * > For more information about configuring SSL in Sails, see:             *
-  * > https://sailsjs.com/config/*#?sailsconfigssl                          *
-  *                                                                         *
-  **************************************************************************/
-  // ssl: undefined,
-
-
-
-  /**************************************************************************
-  *                                                                         *
-  * Production overrides for any custom settings specific to your app.      *
-  * (for example, production credentials for 3rd party APIs like Stripe)    *
-  *                                                                         *
-  * > See config/custom.js for more info on how to configure these options. *
-  *                                                                         *
-  ***************************************************************************/
   custom: {}
 
 };
