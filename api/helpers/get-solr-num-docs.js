@@ -16,6 +16,7 @@ module.exports = {
   fn: function(inputs, exits) {
 
     const coreName = inputs.coreName
+    sails.log.verbose(`Fetching SOLR docs from *${coreName}* core @ ${process.env.NLP_SOLR_URL_TOP_LEVEL}`);
 
     request({
       method: 'GET',
@@ -29,6 +30,7 @@ module.exports = {
         return exits.error(`Error fetching number of Solr documents. Make sure you created the *${process.env.NLP_CORE_NAME}* core.`);
       }
       const numDocs = JSON.parse(body).response.numFound;
+      sails.log.verbose(`Num Docs on *${coreName}* core: ${numDocs}`);
       return exits.success(numDocs);
     });
 

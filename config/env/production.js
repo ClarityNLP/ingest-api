@@ -145,7 +145,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   log: {
-    level: 'debug'
+    level: process.env.INGEST_API_LOG_LEVEL || 'info'
   },
 
 
