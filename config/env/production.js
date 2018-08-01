@@ -72,7 +72,7 @@ module.exports = {
     secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
 
     adapter: 'connect-redis',
-    url: `redis://${MAPPER_REDIS_HOSTNAME}:${MAPPER_REDIS_CONTAINER_PORT}/0`,
+    url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
 
     cookie: {
       // secure: true,
