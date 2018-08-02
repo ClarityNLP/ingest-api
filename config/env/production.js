@@ -1,51 +1,20 @@
 module.exports = {
 
   datastores: {
-
     default: {
       adapter: 'sails-mongo',
       url: `mongodb://${process.env.INGEST_MONGO_HOSTNAME}:${process.env.INGEST_MONGO_CONTAINER_PORT}/${process.env.INGEST_MONGO_DATABASE}`
     }
-
   },
-
-
 
   models: {
-
     migrate: 'safe',
-
   },
 
-
-
-  /**************************************************************************
-  *                                                                         *
-  * Always disable "shortcut" blueprint routes.                             *
-  *                                                                         *
-  * > You'll also want to disable any other blueprint routes if you are not *
-  * > actually using them (e.g. "actions" and "rest") -- but you can do     *
-  * > that in `config/blueprints.js`, since you'll want to disable them in  *
-  * > all environments (not just in production.)                            *
-  *                                                                         *
-  ***************************************************************************/
   blueprints: {
     shortcuts: false,
   },
 
-
-
-  /***************************************************************************
-  *                                                                          *
-  * Configure your security settings for production.                         *
-  *                                                                          *
-  * IMPORTANT:                                                               *
-  * If web browsers will be communicating with your app, be sure that        *
-  * you have CSRF protection enabled.  To do that, set `csrf: true` over     *
-  * in the `config/security.js` file (not here), so that CSRF app can be     *
-  * tested with CSRF protection turned on in development mode too.           *
-  *                                                                          *
-  ***************************************************************************/
   security: {
     cors: {
       allRoutes: true,
@@ -55,64 +24,23 @@ module.exports = {
     }
   },
 
-
-
-  /***************************************************************************
-  *                                                                          *
-  * Configure how your app handles sessions in production.                   *
-  *                                                                          *
-  * (https://sailsjs.com/config/session)                                     *
-  *                                                                          *
-  * > If you have disabled the "session" hook, then you can safely remove    *
-  * > this section from your `config/env/production.js` file.                *
-  *                                                                          *
-  ***************************************************************************/
   session: {
 
     secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
-
     adapter: 'connect-redis',
     url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
-
     cookie: {
       // secure: true,
       maxAge: 24 * 60 * 60 * 1000,  // 24 hours
-    },
-
+    }
   },
 
-
-
-  /**************************************************************************
-  *                                                                          *
-  * Set up Socket.io for your production environment.                        *
-  *                                                                          *
-  * (https://sailsjs.com/config/sockets)                                     *
-  *                                                                          *
-  * > If you have disabled the "sockets" hook, then you can safely remove    *
-  * > this section from your `config/env/production.js` file.                *
-  *                                                                          *
-  ***************************************************************************/
   sockets: {
 
     onlyAllowOrigins: [
       process.env.BASE_URL,
       `${process.env.BASE_URL}:${process.env.INGEST_CLIENT_HOST_PORT}`
     ],
-
-    /***************************************************************************
-    *                                                                          *
-    * Uncomment the `onlyAllowOrigins` whitelist below to configure which      *
-    * "origins" are allowed to open socket connections to your Sails app.      *
-    *                                                                          *
-    * > Replace "https://example.com" etc. with the URL(s) of your app.        *
-    * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
-    *                                                                          *
-    ***************************************************************************/
-    // onlyAllowOrigins: [
-    //   'https://example.com',
-    //   'https://staging.example.com',
-    // ],
 
 
     /***************************************************************************
