@@ -28,7 +28,7 @@ module.exports = {
 
     secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
     adapter: '@sailshq/connect-redis',
-    url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
+    url: `redis://${process.env.REDIS_HOSTNAME}:${process.env.REDIS_CONTAINER_PORT}/0`,
     cookie: {
       // secure: true,
       maxAge: 24 * 60 * 60 * 1000,  // 24 hours
@@ -43,7 +43,7 @@ module.exports = {
     ],
 
     adapter: '@sailshq/socket.io-redis',
-    url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
+    url: `redis://${process.env.REDIS_HOSTNAME}:${process.env.REDIS_CONTAINER_PORT}/0`,
     // url: 'redis://user:password@bigsquid.redistogo.com:9562/dbname',
   },
 
