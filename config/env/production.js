@@ -27,7 +27,7 @@ module.exports = {
   session: {
 
     secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
-    adapter: 'connect-redis',
+    adapter: '@sailshq/connect-redis',
     url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
     cookie: {
       // secure: true,
@@ -42,47 +42,14 @@ module.exports = {
       `${process.env.BASE_URL}:${process.env.INGEST_CLIENT_HOST_PORT}`
     ],
 
-
-    /***************************************************************************
-    *                                                                          *
-    * If you are deploying a cluster of multiple servers and/or processes,     *
-    * then uncomment the following lines.  This tells Socket.io about a Redis  *
-    * server it can use to help it deliver broadcasted socket messages.        *
-    *                                                                          *
-    * > Be sure you have a compatible version of socket.io-redis installed!    *
-    * > (See https://sailsjs.com/config/sockets for the latest version info)   *
-    *                                                                          *
-    * (https://sailsjs.com/docs/concepts/deployment/scaling)                   *
-    *                                                                          *
-    ***************************************************************************/
-    // adapter: 'socket.io-redis',
+    adapter: '@sailshq/socket.io-redis',
+    url: `redis://${process.env.MAPPER_REDIS_HOSTNAME}:${process.env.MAPPER_REDIS_CONTAINER_PORT}/0`,
     // url: 'redis://user:password@bigsquid.redistogo.com:9562/dbname',
-    //--------------------------------------------------------------------------
-    // /\   OR, to avoid checking it in to version control, you might opt to
-    // ||   set sensitive credentials like this using an environment variable.
-    //
-    // For example:
-    // ```
-    // sails_sockets__url=redis://admin:myc00lpAssw2D@bigsquid.redistogo.com:9562/
-    // ```
-    //--------------------------------------------------------------------------
-
   },
 
-
-
-  /**************************************************************************
-  *                                                                         *
-  * Set the production log level.                                           *
-  *                                                                         *
-  * (https://sailsjs.com/config/log)                                        *
-  *                                                                         *
-  ***************************************************************************/
   log: {
     level: process.env.INGEST_API_LOG_LEVEL || 'info'
   },
-
-
 
   http: {
 
