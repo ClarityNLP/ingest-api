@@ -67,9 +67,10 @@ module.exports = function(agenda) {
           }, {});
 
           //create unique hash using report_text as digest, set as solr id to avoid dups
-          payload['id'] = crypto.createHash('md5')
-            .update(row[mappings['report_text'].sourceField])
-            .digest('hex')
+          //TODO remove - solr SignatureUpdateProcessorFactory handling now
+          // payload['id'] = crypto.createHash('md5')
+          //   .update(row[mappings['report_text'].sourceField])
+          //   .digest('hex')
 
           //add ingestId so documents added during this ingest job can be deleted from solr easily
           payload['ingest_id_attr'] = ingest.id;
@@ -80,7 +81,7 @@ module.exports = function(agenda) {
           if (count == chunkSize) {
             count = 0;
             request({
-              url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?commit=true&overwrite=true`,
+              url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?update.chain=dedupe&commit=true`,
               method: 'POST',
               body: chunk,
               json: true
@@ -119,7 +120,7 @@ module.exports = function(agenda) {
 
         csvStream.on('end', function(){
           request({
-            url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?commit=true&overwrite=true`,
+            url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?update.chain=dedupe&commit=true`,
             method: 'POST',
             body: chunk,
             json: true
