@@ -6,6 +6,12 @@ module.exports.routes = {
   //get fields
   'get /fields': 'FieldController.getFields',
 
+  //create field
+  'post /fields': 'FieldController.createCustomField',
+
+  //delete field
+  'delete /fields/:field': 'FieldController.deleteField',
+
   //ingest jobs
   'post /ingest/:ingestId/schedule': 'CsvController.scheduleIngestJob',
 
