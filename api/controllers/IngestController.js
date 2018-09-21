@@ -11,10 +11,10 @@ module.exports = {
       }
       //check if the next page has records (in order to know if we should hide/show next page button in UI)
       Ingest.find( { where: { status: { '!=': 'queue' } }, limit: 5, skip: ((page+1)*5), sort: 'createdAt DESC' } ).exec(function(err, nextPageRecords) {
-        if (err) new Promise(function(resolve, reject) {
+        if (err) {
           sails.log.error(err);
           return res.status(500).send({});
-        });
+        };
         const isNextDisabled = nextPageRecords.length == 0;
         return res.status(200).send( { records: paginatedIngestRecords, isNextDisabled: isNextDisabled, page: page } );
       });
