@@ -25,6 +25,10 @@ module.exports = {
       type: 'json'
     },
 
+    errorStack: {
+      type: 'json'
+    },
+
     //soft delete
     isDeleted: {
       type: 'boolean',
