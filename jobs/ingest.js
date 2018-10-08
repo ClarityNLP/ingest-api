@@ -49,8 +49,6 @@ module.exports = function(agenda) {
 
         var onValidate = function(row, next) {
 
-          console.log("row: ",row);
-
           function getValue(row, solrField, mappings) {
             const type = mappings[solrField].type;
             let value;
@@ -66,8 +64,6 @@ module.exports = function(agenda) {
             result[solrField] = getValue(row, solrField, mappings);
             return result;
           }, {});
-
-          console.log('payload: ',payload);
 
           //create unique hash using report_text as digest, set as solr id to avoid dups
           //TODO remove - solr SignatureUpdateProcessorFactory handling now
