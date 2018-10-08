@@ -39,8 +39,7 @@ module.exports = function(agenda) {
 
         resumable.write(identifier, csvStream, {
           onDone: function() {
-            sails.log.info('JOB FINISHED.')
-            // done();
+            sails.log.info(`FINISHED PIPING ${identifier} TO CSV STREAM.`);
           }
         });
 
@@ -50,13 +49,15 @@ module.exports = function(agenda) {
 
         var onValidate = function(row, next) {
 
+          console.log("row: ",row);
+
           function getValue(row, solrField, mappings) {
             const type = mappings[solrField].type;
             let value;
             if (type === 'select') {
-              value = row[mappings[solrField].sourceField] || 'Not Mapped';
+              value = row[mappings[solrField].sourceField];
             } else {
-              value = mappings[solrField].value || 'No Manual Entry'
+              value = mappings[solrField].value
             }
             return value;
           }
@@ -65,6 +66,8 @@ module.exports = function(agenda) {
             result[solrField] = getValue(row, solrField, mappings);
             return result;
           }, {});
+
+          console.log('payload: ',payload);
 
           //create unique hash using report_text as digest, set as solr id to avoid dups
           //TODO remove - solr SignatureUpdateProcessorFactory handling now
@@ -143,6 +146,17 @@ module.exports = function(agenda) {
                 });
               }
             });
+          });
+        });
+
+        csvStream.on('error', function(err) {
+          Ingest.update( { id: ingest.id }, { status: 'failed', errorStack: err } ).fetch().exec(function(err, updatedIngestRecord) {
+            if (err) {
+              sails.log.error(err);
+              done();
+            }
+            sails.sockets.blast('ingestRecordStatusUpdate', updatedIngestRecord[0]);
+            done();
           });
         });
       });
