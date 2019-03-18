@@ -1,6 +1,6 @@
 var Agenda = require('agenda');
 
-var agenda = new Agenda({db: { address: `mongodb://${process.env.INGEST_MONGO_HOSTNAME}:${process.env.INGEST_MONGO_CONTAINER_PORT}/${process.env.INGEST_MONGO_DATABASE}` }});
+var agenda = new Agenda({db: { address: `mongodb://admin:password@${process.env.INGEST_MONGO_HOSTNAME}:${process.env.INGEST_MONGO_CONTAINER_PORT}/${process.env.INGEST_MONGO_DATABASE}` }});
 
 var jobTypes = process.env.JOB_TYPES ? process.env.JOB_TYPES.split(',') : [];
 

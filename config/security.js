@@ -32,6 +32,7 @@ module.exports.security = {
     allRoutes: true,
     allowOrigins: '*',
     allowCredentials: true,
+    allowRequestHeaders: 'authorization', //TODO do we want this, or tell client to remove interceptor on preflight (OPTION) requests?
     allowAnyOriginWithCredentialsUnsafe: true
   },
 

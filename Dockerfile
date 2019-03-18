@@ -20,6 +20,5 @@ RUN chmod +w RESUMABLE_DIR
 
 COPY . .
 
-EXPOSE 1340
-# CMD ["npm", "start"]
+EXPOSE 1337
 CMD ["pm2-dev", "process.json"]

@@ -1,9 +1,22 @@
+const {
+  INGEST_MONGO_USERNAME,
+  INGEST_MONGO_PASSWORD,
+  INGEST_MONGO_HOSTNAME,
+  INGEST_MONGO_CONTAINER_PORT,
+  INGEST_MONGO_DATABASE,
+  REDIS_HOSTNAME,
+  REDIS_CONTAINER_PORT,
+  BASE_URL,
+  INGEST_CLIENT_HOST_PORT,
+  INGEST_API_LOG_LEVEL,
+}
+
 module.exports = {
 
   datastores: {
     default: {
       adapter: 'sails-mongo',
-      url: `mongodb://${process.env.INGEST_MONGO_HOSTNAME}:${process.env.INGEST_MONGO_CONTAINER_PORT}/${process.env.INGEST_MONGO_DATABASE}`
+      url: `mongodb://${INGEST_MONGO_USERNAME}:${INGEST_MONGO_PASSWORD}@${INGEST_MONGO_HOSTNAME}:${INGEST_MONGO_CONTAINER_PORT}/${INGEST_MONGO_DATABASE}`
     }
   },
 
@@ -28,7 +41,7 @@ module.exports = {
 
     secret: 'fcea8be379be2dc12d47a5a40a0f7a98',
     adapter: '@sailshq/connect-redis',
-    url: `redis://${process.env.REDIS_HOSTNAME}:${process.env.REDIS_CONTAINER_PORT}/0`,
+    url: `redis://${REDIS_HOSTNAME}:${REDIS_CONTAINER_PORT}/0`,
     cookie: {
       // secure: true,
       maxAge: 24 * 60 * 60 * 1000,  // 24 hours
@@ -38,17 +51,17 @@ module.exports = {
   sockets: {
 
     onlyAllowOrigins: [
-      process.env.BASE_URL,
-      `${process.env.BASE_URL}:${process.env.INGEST_CLIENT_HOST_PORT}`
+      BASE_URL,
+      `${BASE_URL}:${INGEST_CLIENT_HOST_PORT}`
     ],
 
     adapter: '@sailshq/socket.io-redis',
-    url: `redis://${process.env.REDIS_HOSTNAME}:${process.env.REDIS_CONTAINER_PORT}/0`,
+    url: `redis://${REDIS_HOSTNAME}:${REDIS_CONTAINER_PORT}/0`,
     // url: 'redis://user:password@bigsquid.redistogo.com:9562/dbname',
   },
 
   log: {
-    level: process.env.INGEST_API_LOG_LEVEL || 'info'
+    level: INGEST_API_LOG_LEVEL || 'info'
   },
 
   http: {
@@ -80,17 +93,6 @@ module.exports = {
 
   },
 
-
-
-  /**************************************************************************
-  *                                                                         *
-  * Lift the server on port 80.                                             *
-  * (if deploying behind a proxy, or to a PaaS like Heroku or Deis, you     *
-  * probably don't need to set a port here, because it is oftentimes        *
-  * handled for you automatically.  If you are not sure if you need to set  *
-  * this, just try deploying without setting it and see if it works.)       *
-  *                                                                         *
-  ***************************************************************************/
   // port: 80,
 
 
