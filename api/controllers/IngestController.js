@@ -1,5 +1,5 @@
 const request = require('request');
-const = {
+const {
   NLP_SOLR_HOSTNAME,
   NLP_SOLR_CONTAINER_PORT,
   NLP_CORE_NAME,
