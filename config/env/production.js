@@ -6,10 +6,12 @@ const {
   INGEST_MONGO_DATABASE,
   REDIS_HOSTNAME,
   REDIS_CONTAINER_PORT,
-  BASE_URL,
   INGEST_CLIENT_HOST_PORT,
   INGEST_API_LOG_LEVEL,
-}
+  PROTOCOL,
+  DOMAIN,
+  INGEST_CLIENT_SUBDOMAIN,
+} = process.env;
 
 module.exports = {
 
@@ -43,7 +45,7 @@ module.exports = {
     adapter: '@sailshq/connect-redis',
     url: `redis://${REDIS_HOSTNAME}:${REDIS_CONTAINER_PORT}/0`,
     cookie: {
-      // secure: true,
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,  // 24 hours
     }
   },
@@ -51,13 +53,10 @@ module.exports = {
   sockets: {
 
     onlyAllowOrigins: [
-      BASE_URL,
-      `${BASE_URL}:${INGEST_CLIENT_HOST_PORT}`
+      `${PROTOCOL}://${INGEST_CLIENT_SUBDOMAIN}.${DOMAIN}`
     ],
-
     adapter: '@sailshq/socket.io-redis',
     url: `redis://${REDIS_HOSTNAME}:${REDIS_CONTAINER_PORT}/0`,
-    // url: 'redis://user:password@bigsquid.redistogo.com:9562/dbname',
   },
 
   log: {
@@ -89,7 +88,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    // trustProxy: true,
+    trustProxy: true,
 
   },
 
