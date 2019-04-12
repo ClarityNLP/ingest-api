@@ -11,7 +11,6 @@ RUN apk add --no-cache bash
 # some bash niceties
 ADD .docker/root/.bashrc /root/
 
-COPY ../../scripts/wait-for-it-extra.sh $APP_HOME
 COPY package.json $APP_HOME
 
 RUN npm install
