@@ -19,6 +19,7 @@ module.exports = function(agenda) {
         sails.log.info(`INGEST ${ingest.id} NOT FOUND. ENDING INGEST JOB`);
         done();
       }
+      sails.log.debug(`FOUNG INGEST RECORD: ${JSON.stringify(ingest)}`);
       //update ingest status to *inProgress* and broadcast update to clients
       Ingest.update( { id: ingest.id }, { status: 'inProgress' } ).fetch().exec(function(err, updatedIngestRecord) {
         if (err) {
