@@ -24,6 +24,6 @@ module.exports.log = {
   *                                                                          *
   ***************************************************************************/
 
-  // level: 'info'
+  level: process.env.INGEST_API_LOG_LEVEL || 'info'
 
 };
