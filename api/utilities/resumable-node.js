@@ -110,6 +110,8 @@ module.exports = resumable = function(temporaryFolder){
 
       var chunkFilename = getChunkFilename(chunkNumber, identifier);
 
+      sails.log.debug(`chunkFilename: ${chunkFilename}`);
+
       fs.move(uploadedFiles[0].fd, chunkFilename, { overwrite: true }, err => {
         if (err) {
           sails.log.error(err);

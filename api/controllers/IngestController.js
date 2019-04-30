@@ -1,4 +1,9 @@
 const request = require('request');
+const {
+  NLP_SOLR_HOSTNAME,
+  NLP_SOLR_CONTAINER_PORT,
+  NLP_CORE_NAME,
+} = process.env;
 
 module.exports = {
 
@@ -40,7 +45,7 @@ module.exports = {
         }
         //delete documents tagged with *ingestId* from solr
         request({
-          url: `http://${process.env.NLP_SOLR_HOSTNAME}:${process.env.NLP_SOLR_CONTAINER_PORT}/solr/${process.env.NLP_CORE_NAME}/update/json?commit=true`,
+          url: `http://${NLP_SOLR_HOSTNAME}:${NLP_SOLR_CONTAINER_PORT}/solr/${NLP_CORE_NAME}/update/json?commit=true`,
           method: 'POST',
           body: {
               "delete": {
@@ -53,7 +58,7 @@ module.exports = {
             sails.log.error(err);
             return res.status(500).send({});
           } else {
-            sails.helpers.getSolrNumDocs( process.env.NLP_CORE_NAME ).switch({
+            sails.helpers.getSolrNumDocs(NLP_CORE_NAME).switch({
               error: function(err) {
                 sails.log.error(err);
                 return res.status(500).send({});
