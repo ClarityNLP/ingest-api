@@ -1,7 +1,7 @@
 {
   "name": "ingest-api",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ingest API",
   "keywords": [],
   "dependencies": {
@@ -9,6 +9,7 @@
     "@sailshq/socket.io-redis": "^5.2.0",
     "agenda": "^1.0.3",
     "async": "2.0.1",
+    "axios": "^0.18.0",
     "crypto": "^1.0.1",
     "fast-csv": "^2.4.1",
     "fs-extra": "^7.0.0",
