@@ -6,11 +6,14 @@ module.exports = {
     updatedAt: { type: 'string', autoUpdatedAt: true },
 
     name: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
 
     field: { //solr field
-      type: 'string'
+      type: 'string',
+      required: true,
+      unique: true
     },
 
     suffix: {
@@ -20,25 +23,28 @@ module.exports = {
 
     type: {
       type: 'string',
-      isIn: ['text', 'select']
+      isIn: ['text', 'select'],
+      required: true
     },
 
     inputTypeLocked: {
       type: 'boolean',
-      defaultsTo: false
+      defaultsTo: false,
     },
 
     requiredType: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
 
     validationMessage: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
 
     isCustom: {
       type: 'boolean',
-      defaultsTo: true
+      defaultsTo: true,
     },
 
     fieldWithSuffix: {
