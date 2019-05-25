@@ -105,6 +105,10 @@ module.exports = resumable = function(temporaryFolder){
         sails.log.error(err);
         callback('error', filename, original_filename, identifier);
       }
+      if (!uploadedFiles) {
+        sails.log.error(`No uploaded file found for ${identifier}`);
+        callback('error', filename, original_filename, identifier);
+      }
 
       //TODO -- validation
 
