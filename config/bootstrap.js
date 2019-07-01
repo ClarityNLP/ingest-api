@@ -134,7 +134,7 @@ module.exports.bootstrap = function(done) {
       });
   };
 
-  const brodcastInterval = setInterval(broadcast, INTERVAL);
+  // const brodcastInterval = setInterval(broadcast, INTERVAL);
 
   // Check to see if we have already seeded the Field collection w/ default data
   Field.count().exec(function(err, fieldCount) {
