@@ -2,7 +2,6 @@ const {
   REDIS_HOSTNAME,
   REDIS_CONTAINER_PORT,
   PROTOCOL,
-  DOMAIN,
   INGEST_URL,
   DASHBOARD_URL
 } = process.env;
