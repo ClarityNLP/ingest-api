@@ -9,8 +9,9 @@ const {
   INGEST_CLIENT_HOST_PORT,
   INGEST_API_LOG_LEVEL,
   PROTOCOL,
-  INGEST_URL,
-  DASHBOARD_URL
+  INGEST_HOST,
+  DASHBOARD_HOST,
+  ENTRYPOINT
 } = process.env;
 
 module.exports = {
@@ -53,8 +54,8 @@ module.exports = {
   sockets: {
 
     onlyAllowOrigins: [
-      `${PROTOCOL}://${INGEST_URL}`,
-      `${PROTOCOL}://${DASHBOARD_URL}`
+      `${PROTOCOL}://${INGEST_HOST}${ENTRYPOINT==="443" || ENTRYPOINT==="80" ? "" : `:${ENTRYPOINT}`}`,
+      `${PROTOCOL}://${DASHBOARD_HOST}${ENTRYPOINT==="443" || ENTRYPOINT==="80" ? "" : `:${ENTRYPOINT}`}`
     ],
     adapter: '@sailshq/socket.io-redis',
     url: `redis://${REDIS_HOSTNAME}:${REDIS_CONTAINER_PORT}/0`,
