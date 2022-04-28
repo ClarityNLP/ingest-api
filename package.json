@@ -8,7 +8,7 @@
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0",
     "agenda": "^1.0.3",
-    "async": "2.0.1",
+    "async": "2.6.4",
     "axios": "^0.18.0",
     "crypto": "^1.0.1",
     "fast-csv": "^2.4.1",
